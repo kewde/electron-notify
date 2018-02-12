@@ -182,8 +182,9 @@ function calcDimensions() {
 }
 
 function setupConfig() {
-  // Use primary display only
-  let display = electron.screen.getPrimaryDisplay()
+  const screen = electron.screen
+  // use primary display by default
+  let display = screen.getPrimaryDisplay()
 
   // Display notifications starting from lower right corner
   // Calc lower right corner
@@ -198,7 +199,7 @@ function setupConfig() {
   config.maxVisibleNotifications = config.maxVisibleNotifications > 7 ? 7 : config.maxVisibleNotifications
 }
 
-setupConfig()
+electron.app.on('ready', setupConfig);
 
 // Array of windows with currently showing notifications
 let activeNotifications = []
