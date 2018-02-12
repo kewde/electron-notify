@@ -1,12 +1,14 @@
 'use strict'
 
-const electron = require('electron')
-const ipc = electron.ipcRenderer
-const winId = electron.remote.getCurrentWindow().id
+const ipc = chrome.ipcRenderer
+
+// TODO return winId over IPC? (safer)
+const winId = chrome.remote.getCurrentWindow().id
+// delete chrome.remote;
 
 function setStyle(config) {
   // Style it
-  let notiDoc = global.window.document
+  let notiDoc = window.document
   let container = notiDoc.getElementById('container')
   let appIcon = notiDoc.getElementById('appIcon')
   let image = notiDoc.getElementById('image')
@@ -45,17 +47,17 @@ function setContents(event, notificationObj) {
     try {
       // If it's a local file, check it's existence
       // Won't check remote files e.g. http://
-      if (notificationObj.sound.match(/^file\:/) !== null
-      || notificationObj.sound.match(/^\//) !== null) {
-        let audio = new global.window.Audio(notificationObj.sound)
+      if (notificationObj.sound.match(/^chrome\:\/brave\//) !== null
+      || notificationObj.sound.match(/^\//) !== null) { // TODO remove?
+        let audio = new window.Audio(notificationObj.sound)
         audio.play()
       }
     } catch (e) {
-      log('electron-notify: ERROR could not find sound file: ' + notificationObj.sound.replace('file://', ''), e, e.stack)
+      log('electron-notify: ERROR could not find sound file: ' + notificationObj.sound.replace('chrome://brave', ''), e, e.stack)
     }
   }
 
-  let notiDoc = global.window.document
+  let notiDoc = window.document
   // Title
   let titleDoc = notiDoc.getElementById('title')
   titleDoc.innerHTML = notificationObj.title || ''
@@ -118,6 +120,4 @@ function log() {
   console.log.apply(console, arguments)
 }
 
-delete global.require
-delete global.exports
-delete global.module
+

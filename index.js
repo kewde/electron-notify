@@ -2,6 +2,7 @@
 
 const _ = require('lodash')
 const path = require('path')
+const url = require('url')
 const async = require('async')
 const electron = require('electron')
 const BrowserWindow = electron.BrowserWindow
@@ -139,7 +140,12 @@ function updateTemplatePath() {
     log('electron-notify: To use a different template you need to correct the config.templatePath or simply adapt config.htmlTemplate')
      // TODO: No file => should we create our own temporary notification.html?
   }
-  config.templatePath = 'file://' + templatePath
+  config.templatePath = url.format({
+    protocol: 'chrome:',
+    pathname: path.join('brave', templatePath),
+    slashes: true
+  });
+
   return config.templatePath
 }
 
@@ -150,8 +156,12 @@ function getTemplatePath() {
   return config.templatePath
 }
 
-function setTemplatePath(path) {
-  config.templatePath = path
+function setTemplatePath(dirpath) {
+  config.templatePath = url.format({
+    protocol: 'chrome:',
+    pathname: path.join('brave', dirpath),
+    slashes: true
+  });
 }
 
 let nextInsertPos = {}
