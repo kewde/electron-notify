@@ -1,5 +1,3 @@
-'use strict'
-
 const _ = require('lodash')
 const path = require('path')
 const url = require('url')
@@ -200,6 +198,7 @@ function setupConfig() {
   config.maxVisibleNotifications = config.maxVisibleNotifications > 7 ? 7 : config.maxVisibleNotifications
 }
 
+// trigger app when ready
 app.on('ready', setupConfig);
 
 // Array of windows with currently showing notifications
