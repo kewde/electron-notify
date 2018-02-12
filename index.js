@@ -6,7 +6,9 @@ const url = require('url')
 const async = require('async')
 const electron = require('electron')
 const BrowserWindow = electron.BrowserWindow
-const ipc = electron.ipcMain
+const app = electron.app;
+const ipc = electron.ipcMain;
+const screen = electron.screen;
 
 // One animation at a time
 const AnimationQueue = function(options) {
@@ -182,7 +184,6 @@ function calcDimensions() {
 }
 
 function setupConfig() {
-  const screen = electron.screen
   // use primary display by default
   let display = screen.getPrimaryDisplay()
 
@@ -199,7 +200,7 @@ function setupConfig() {
   config.maxVisibleNotifications = config.maxVisibleNotifications > 7 ? 7 : config.maxVisibleNotifications
 }
 
-electron.app.on('ready', setupConfig);
+app.on('ready', setupConfig);
 
 // Array of windows with currently showing notifications
 let activeNotifications = []
